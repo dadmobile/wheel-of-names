@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 320px;
+      min-height: 200px;
+      padding: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .header h1 {
+      margin: 0;
+      font-size: 18px;
+      color: #374151;
+    }
+    
+    .header p {
+      margin: 4px 0 0 0;
+      color: #6b7280;
+      font-size: 12px;
+    }
+    
+    .participants {
+      margin-bottom: 16px;
+    }
+    
+    .participants h3 {
+      margin: 0 0 8px 0;
+      font-size: 14px;
+      color: #374151;
+    }
+    
+    .participants-list {
+      max-height: 120px;
+      overflow-y: auto;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 8px;
+      background: #f9fafb;
+    }
+    
+    .participant-item {
+      padding: 4px 0;
+      color: #374151;
+      font-size: 13px;
+    }
+    
+    .no-participants {
+      text-align: center;
+      color: #6b7280;
+      font-style: italic;
+      padding: 20px;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 8px;
+      flex-direction: column;
+    }
+    
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .primary {
+      background: #3b82f6;
+      color: white;
+    }
+    
+    .primary:hover:not(:disabled) {
+      background: #2563eb;
+    }
+    
+    .secondary {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    
+    .secondary:hover:not(:disabled) {
+      background: #d1d5db;
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .status {
+      margin-top: 12px;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      text-align: center;
+    }
+    
+    .success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+    
+    .info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🎡 Wheel of Names</h1>
+    <p>Extract participants from Google Meet</p>
+  </div>
+
+  <div class="participants">
+    <h3 id="participantCount">Participants (0)</h3>
+    <div class="participants-list" id="participantsList">
+      <div class="no-participants">
+        Click "Extract Participants" to get names from the current Google Meet session
+      </div>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button id="extractBtn" class="primary">Extract Participants</button>
+    <button id="copyBtn" class="secondary" disabled>Copy to Clipboard</button>
+    <button id="openWheelBtn" class="secondary">Open Wheel of Names</button>
+  </div>
+
+  <div id="status"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html> 

@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Wheel of Names - Meet Integration",
+  "version": "1.0.0",
+  "description": "Extract participant names from Google Meet for the Wheel of Names app",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://meet.google.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Extract Meet Participants"
+  }
+} 

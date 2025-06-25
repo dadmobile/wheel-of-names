@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans;
+  }
+}
+
+@layer components {
+  .wheel-segment {
+    transform-origin: center;
+    transition: all 0.3s ease;
+  }
+  
+  .wheel-segment:hover {
+    filter: brightness(1.1);
+  }
+} 

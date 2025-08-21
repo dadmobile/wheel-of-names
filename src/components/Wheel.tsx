@@ -6,6 +6,7 @@ interface WheelProps {
   participants: Participant[]
   selectedParticipant: Participant | null
   isSpinning: boolean
+  onSelectionComplete?: (participant: Participant) => void
 }
 
 const COLORS = [
@@ -18,8 +19,21 @@ const COLORS = [
 export const Wheel: React.FC<WheelProps> = ({ 
   participants, 
   selectedParticipant, 
-  isSpinning 
+  isSpinning,
+  onSelectionComplete
 }) => {
+  const [currentRotation, setCurrentRotation] = React.useState(0)
+  const [isInternallySpinning, setIsInternallySpinning] = React.useState(false)
+
+  // Update rotation when spinning starts
+  React.useEffect(() => {
+    if (isSpinning && !isInternallySpinning) {
+      setIsInternallySpinning(true)
+      const spinAmount = 1800 + Math.random() * 1800 // 5-10 full rotations
+      setCurrentRotation(prev => prev + spinAmount)
+    }
+  }, [isSpinning, isInternallySpinning])
+
   const segmentAngle = participants.length > 0 ? 360 / participants.length : 0
   const radius = 150
   const centerX = 160
@@ -52,9 +66,25 @@ export const Wheel: React.FC<WheelProps> = ({
     return polarToCartesian(centerX, centerY, textRadius, midAngle)
   }
 
-  const getRotation = () => {
-    if (!isSpinning) return 0
-    return 1800 + Math.random() * 1800 // 5-10 full rotations
+  const calculateSelectedParticipant = (finalRotation: number) => {
+    if (participants.length === 0) return null
+    
+    // Normalize the rotation to 0-360 degrees
+    const normalizedRotation = finalRotation % 360
+    
+    // The arrow points to the top (0 degrees). Since the wheel rotates clockwise,
+    // we need to find which segment is currently at the top position
+    // We invert the rotation because when wheel spins clockwise, 
+    // the segments effectively move counter-clockwise relative to the arrow
+    let arrowAngle = (360 - normalizedRotation) % 360
+    
+    // Ensure positive angle
+    if (arrowAngle < 0) arrowAngle += 360
+    
+    // Find which segment the arrow is pointing to
+    const selectedIndex = Math.floor(arrowAngle / segmentAngle) % participants.length
+    
+    return participants[selectedIndex]
   }
 
   if (participants.length === 0) {
@@ -83,10 +113,19 @@ export const Wheel: React.FC<WheelProps> = ({
           width="320"
           height="320"
           className="drop-shadow-lg"
-          animate={{ rotate: getRotation() }}
+          animate={{ rotate: currentRotation }}
           transition={{
-            duration: isSpinning ? 4 : 0,
+            duration: isInternallySpinning ? 4 : 0,
             ease: "easeOut"
+          }}
+          onAnimationComplete={() => {
+            setIsInternallySpinning(false)
+            if (onSelectionComplete && participants.length > 0) {
+              const selectedParticipant = calculateSelectedParticipant(currentRotation)
+              if (selectedParticipant) {
+                onSelectionComplete(selectedParticipant)
+              }
+            }
           }}
         >
           {participants.map((participant, index) => {

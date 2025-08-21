@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Wheel } from './components/Wheel'
 import { ParticipantList } from './components/ParticipantList'
 import { MeetIntegration } from './components/MeetIntegration'
@@ -28,13 +28,14 @@ function App() {
     setIsSpinning(true)
     setSelectedParticipant(null)
     
-    // Simulate spinning delay
+    // Stop spinning after animation duration
     setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * participants.length)
-      const selected = participants[randomIndex]
-      setSelectedParticipant(selected)
       setIsSpinning(false)
     }, 4000)
+  }
+
+  const handleSelectionComplete = (participant: Participant) => {
+    setSelectedParticipant(participant)
   }
 
   const handleParticipantsUpdate = (newParticipants: Participant[]) => {
@@ -86,6 +87,7 @@ function App() {
                   participants={participants}
                   selectedParticipant={selectedParticipant}
                   isSpinning={isSpinning}
+                  onSelectionComplete={handleSelectionComplete}
                 />
                 
                 <div className="mt-8 space-y-4">

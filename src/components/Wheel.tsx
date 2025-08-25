@@ -35,9 +35,9 @@ export const Wheel: React.FC<WheelProps> = ({
   }, [isSpinning, isInternallySpinning])
 
   const segmentAngle = participants.length > 0 ? 360 / participants.length : 0
-  const radius = 150
-  const centerX = 160
-  const centerY = 160
+  const radius = 200
+  const centerX = 220
+  const centerY = 220
 
   const createPath = (startAngle: number, endAngle: number) => {
     const start = polarToCartesian(centerX, centerY, radius, endAngle)
@@ -89,10 +89,10 @@ export const Wheel: React.FC<WheelProps> = ({
 
   if (participants.length === 0) {
     return (
-      <div className="flex items-center justify-center w-80 h-80 mx-auto">
+      <div className="flex items-center justify-center w-[440px] h-[440px] mx-auto">
         <div className="text-center text-gray-500">
-          <div className="w-32 h-32 mx-auto mb-4 border-4 border-dashed border-gray-300 rounded-full flex items-center justify-center">
-            <span className="text-4xl">🎡</span>
+          <div className="w-40 h-40 mx-auto mb-4 border-4 border-dashed border-gray-300 rounded-full flex items-center justify-center">
+            <span className="text-5xl">🎡</span>
           </div>
           <p>Add participants to spin the wheel!</p>
         </div>
@@ -110,8 +110,8 @@ export const Wheel: React.FC<WheelProps> = ({
         
         {/* Wheel */}
         <motion.svg
-          width="320"
-          height="320"
+          width="440"
+          height="440"
           className="drop-shadow-lg"
           animate={{ rotate: currentRotation }}
           transition={{
@@ -155,15 +155,15 @@ export const Wheel: React.FC<WheelProps> = ({
                   textAnchor="middle"
                   dominantBaseline="middle"
                   fill="white"
-                  fontSize="12"
+                  fontSize="16"
                   fontWeight="bold"
                   className="pointer-events-none"
                   style={{
                     textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
                   }}
                 >
-                  {participant.name.length > 12 
-                    ? participant.name.substring(0, 12) + '...' 
+                  {participant.name.length > 16 
+                    ? participant.name.substring(0, 16) + '...' 
                     : participant.name
                   }
                 </text>
@@ -175,10 +175,10 @@ export const Wheel: React.FC<WheelProps> = ({
           <circle
             cx={centerX}
             cy={centerY}
-            r="20"
+            r="25"
             fill="#374151"
             stroke="#ffffff"
-            strokeWidth="3"
+            strokeWidth="4"
           />
         </motion.svg>
       </div>

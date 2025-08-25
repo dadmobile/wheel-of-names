@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Wheel } from './components/Wheel'
 import { ParticipantList } from './components/ParticipantList'
 import { MeetIntegration } from './components/MeetIntegration'
-import { VideoIcon, UsersIcon, RotateCcwIcon, ChevronLeftIcon } from 'lucide-react'
+import { VideoIcon, UsersIcon, RotateCcwIcon, ChevronLeftIcon, XIcon } from 'lucide-react'
 
 export interface Participant {
   id: string
@@ -46,6 +46,14 @@ function App() {
 
   const resetSelection = () => {
     setSelectedParticipant(null)
+  }
+
+  const removeWinner = () => {
+    if (selectedParticipant) {
+      const updatedParticipants = participants.filter(p => p.id !== selectedParticipant.id)
+      setParticipants(updatedParticipants)
+      setSelectedParticipant(null)
+    }
   }
 
   const toggleSidebar = () => {
@@ -138,18 +146,6 @@ function App() {
                   >
                     {isSpinning ? 'Spinning...' : 'SPIN THE WHEEL!'}
                   </button>
-                  
-                  {selectedParticipant && (
-                    <button
-                      onClick={resetSelection}
-                      className="ml-4 text-gray-600 hover:text-gray-800 px-4 py-2 
-                               rounded-lg border border-gray-300 hover:border-gray-400
-                               transition-colors duration-200 flex items-center gap-2"
-                    >
-                      <RotateCcwIcon className="w-4 h-4" />
-                      Reset
-                    </button>
-                  )}
                 </div>
 
                 {selectedParticipant && (
@@ -157,9 +153,29 @@ function App() {
                     <h3 className="text-lg font-semibold text-green-800 mb-1">
                       🎉 Winner Selected!
                     </h3>
-                    <p className="text-2xl font-bold text-green-700">
+                    <p className="text-2xl font-bold text-green-700 mb-4">
                       {selectedParticipant.name}
                     </p>
+                    <div className="flex justify-center gap-3">
+                      <button
+                        onClick={resetSelection}
+                        className="text-gray-600 hover:text-gray-800 px-4 py-2 
+                                 rounded-lg border border-gray-300 hover:border-gray-400
+                                 transition-colors duration-200 flex items-center gap-2"
+                      >
+                        <RotateCcwIcon className="w-4 h-4" />
+                        Keep & Reset
+                      </button>
+                      <button
+                        onClick={removeWinner}
+                        className="text-red-600 hover:text-red-800 px-4 py-2 
+                                 rounded-lg border border-red-300 hover:border-red-400
+                                 transition-colors duration-200 flex items-center gap-2 bg-red-50 hover:bg-red-100"
+                      >
+                        <XIcon className="w-4 h-4" />
+                        Remove from Wheel
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Wheel } from './components/Wheel'
 import { ParticipantList } from './components/ParticipantList'
 import { MeetIntegration } from './components/MeetIntegration'
-import { VideoIcon, UsersIcon, RotateCcwIcon } from 'lucide-react'
+import { VideoIcon, UsersIcon, RotateCcwIcon, ChevronLeftIcon } from 'lucide-react'
 
 export interface Participant {
   id: string
@@ -21,6 +21,7 @@ function App() {
   
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null)
   const [isSpinning, setIsSpinning] = useState(false)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   const handleSpin = () => {
     if (participants.length === 0 || isSpinning) return
@@ -47,6 +48,10 @@ function App() {
     setSelectedParticipant(null)
   }
 
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed)
+  }
+
   return (
     <div className="min-h-screen p-4">
       <div className="max-w-6xl mx-auto">
@@ -61,26 +66,59 @@ function App() {
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Panel - Meet Integration */}
-          <div className="space-y-6">
-            <MeetIntegration onParticipantsUpdate={handleParticipantsUpdate} />
-            
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <UsersIcon className="w-5 h-5" />
-                Participants ({participants.length})
-              </h3>
-              <ParticipantList 
-                participants={participants} 
-                selectedParticipant={selectedParticipant}
-                onUpdate={setParticipants}
-              />
-            </div>
+        <div className="grid lg:grid-cols-3 gap-8 relative">
+          {/* Floating Participants Button (when collapsed) */}
+          {isSidebarCollapsed && (
+            <button
+              onClick={toggleSidebar}
+              className="fixed top-20 left-4 z-40 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-colors duration-200 flex items-center gap-2"
+              title="Show participants"
+            >
+              <UsersIcon className="w-5 h-5" />
+              <span className="text-sm font-medium">{participants.length}</span>
+            </button>
+          )}
+
+          {/* Collapsible Left Panel - Meet Integration */}
+          <div className={`transition-all duration-300 ease-in-out ${
+            isSidebarCollapsed 
+              ? 'lg:w-0 lg:overflow-hidden' 
+              : 'space-y-6'
+          }`}>
+            {/* Collapse/Expand Button */}
+            {!isSidebarCollapsed && (
+              <button
+                onClick={toggleSidebar}
+                className="absolute top-4 right-4 z-30 p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors duration-200"
+                title="Collapse sidebar"
+              >
+                <ChevronLeftIcon className="w-5 h-5" />
+              </button>
+            )}
+
+            {!isSidebarCollapsed && (
+              <>
+                <MeetIntegration onParticipantsUpdate={handleParticipantsUpdate} />
+                
+                <div className="bg-white rounded-lg shadow-lg p-6 relative">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 pr-12">
+                    <UsersIcon className="w-5 h-5" />
+                    Participants ({participants.length})
+                  </h3>
+                  <ParticipantList 
+                    participants={participants} 
+                    selectedParticipant={selectedParticipant}
+                    onUpdate={setParticipants}
+                  />
+                </div>
+              </>
+            )}
           </div>
 
           {/* Center Panel - Wheel */}
-          <div className="lg:col-span-2">
+          <div className={`transition-all duration-300 ease-in-out ${
+            isSidebarCollapsed ? 'lg:col-span-3' : 'lg:col-span-2'
+          }`}>
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="text-center mb-6">
                 <Wheel 
